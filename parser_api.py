@@ -4,12 +4,14 @@ import pandas as pd
 import time
 
 executable_name = "parser"
+source_filename = "parser.cpp"
 node_filename = "apat63_99.txt"
 edge_filename = "cit-Patents.txt"
 year2partition = "1990"
 path_to_executable = "/Users/dzdang/Desktop/eecs598/project"
 
-os.system('cd {0}'.format(path_to_executable))
+os.system("cd {0}".format(path_to_executable))
+os.system("g++ -std=c++11 -o {0} {1}".format(executable_name,source_filename))
 # cmd = "parser {0} {1} {2}".format(node_filename, edge_filename, year2partition)
 os.system("./parser {0} {1} {2}".format(edge_filename, node_filename, year2partition))
 
@@ -24,7 +26,7 @@ train_adj_list_pd = pd.read_csv("train.dat",' ', header=None)      #pandas appea
 # print("Pandas load time: ", end - start)
 
 #convert pandas dataframe to numpy array
-train_adj_list_pd = train_adj_list_pd.values
+# train_adj_list_pd = train_adj_list_pd.values
 
 
 def load_adj_list(filename):
