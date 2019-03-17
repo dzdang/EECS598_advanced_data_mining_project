@@ -3,42 +3,45 @@
 #include <fstream>
 
 std::string find_node_id(const std::string &year, const std::string &filename);
-void partition_edges(const int node_id, const std::string &filename);
+void partition_edges(const int upper_node_id, const int lower_node_id, const std::string &filename);
 
 int main(int argc, char const *argv[])
 {
-   if(argc != 4)
+   if(argc != 5)
    {
-      std::cerr << "Expected 4 argument arguments: received: " << argc << std::endl;
+      std::cerr << "Expected 5 argument arguments: received: " << argc << std::endl;
       std::cerr << "Provide arguments in following order: " << 
          "1) ./executable "
          "2) Edge list file name " 
          "3) Node info file name "
-         "4) Input year to partition"
+         "4) Input year (lower) to partition"
+         "5) Input year (upper) to partition"
          << std::endl;
       exit(EXIT_FAILURE);
    }
 
    std::string edge_filename(argv[1]);
    std::string node_info_filename(argv[2]);
-   std::string year(argv[3]);
+   std::string year_upper(argv[3]);
+   std::string year_lower(argv[4]);
 
    std::cout << "---------------INPUT PARAMETERS-------------------------" << std::endl;
    std::cout << "Connectivity input file name: " << edge_filename << std::endl;
    std::cout << "Nodal info input file name: " << node_info_filename << std::endl;
-   std::cout << "Year input: " << year << std::endl;
+   std::cout << "Year lower input: " << year_lower << std::endl;
+   std::cout << "Year upper input: " << year_upper << std::endl;
    std::cout << "--------------------------------------------------------" << std::endl;
 
+   auto upper_node_id = find_node_id(year_upper, node_info_filename);
+   auto lower_node_id = find_node_id(year_lower, node_info_filename);
 
-   auto node_id = find_node_id(year, node_info_filename);
-
-   partition_edges(std::stoi(node_id), edge_filename);
+   partition_edges(std::stoi(lower_node_id), std::stoi(upper_node_id), edge_filename);
 
    return 0;
 }
 
 //function for partioning the provide edge list file into train and test data based on node_id
-void partition_edges(const int bnd, const std::string &filename)
+void partition_edges(const int low_bnd, const int up_bnd, const std::string &filename)
 {
    const std::string trainfilename("train.dat");
    const std::string test_filename("test.dat");
@@ -72,13 +75,13 @@ void partition_edges(const int bnd, const std::string &filename)
    std::ofstream trainfile("train.dat");
    std::ofstream testfile("test.dat");
 
-   if(u < bnd && v < bnd) trainfile << u << " " << v << std::endl;
-   else testfile << u << " " << v << std::endl; 
+   if(u < up_bnd && v < up_bnd && u >= low_bnd && v >= low_bnd) trainfile << u << " " << v << std::endl;
+   else if(u >= up_bnd && v >= up_bnd) testfile << u << " " << v << std::endl; 
 
    while(infile >> u >> v)
    {
-      if(u < bnd && v < bnd) trainfile << u << " " << v << std::endl;
-      else testfile << u << " " << v << std::endl; 
+      if(u < up_bnd && v < up_bnd && u >= low_bnd && v >= low_bnd) trainfile << u << " " << v << std::endl;
+      else if(u >= up_bnd && v >= up_bnd) testfile << u << " " << v << std::endl; 
    }
 
    trainfile.close();
