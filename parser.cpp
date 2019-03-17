@@ -22,8 +22,8 @@ int main(int argc, char const *argv[])
 
    std::string edge_filename(argv[1]);
    std::string node_info_filename(argv[2]);
+   std::string year_lower(argv[3]);
    std::string year_upper(argv[3]);
-   std::string year_lower(argv[4]);
 
    std::cout << "---------------INPUT PARAMETERS-------------------------" << std::endl;
    std::cout << "Connectivity input file name: " << edge_filename << std::endl;
