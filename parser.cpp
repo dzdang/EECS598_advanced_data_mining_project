@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <unordered_map>
 
 std::string find_node_id(const std::string &year, const std::string &filename);
 void partition_edges(const int upper_node_id, const int lower_node_id, const std::string &filename);
@@ -45,6 +46,7 @@ void partition_edges(const int low_bnd, const int up_bnd, const std::string &fil
 {
    const std::string trainfilename("train.dat");
    const std::string test_filename("test.dat");
+   std::unordered_map<int,int> ht; 
 
    std::cout << "Partioning edges into train and test.." << std::endl;
 
