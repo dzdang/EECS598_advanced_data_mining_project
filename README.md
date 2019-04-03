@@ -61,3 +61,7 @@ If you find *SDNE* useful in your research, we ask that you cite the following p
 
 
 
+=======
+# EECS598_advanced_data_mining_project
+A collaboration repo for the EECS598 - Advanced Data Mining project.
+>>>>>>> 33e3c7dba097405fa4baf1e4bd4f7b854778c6fa
