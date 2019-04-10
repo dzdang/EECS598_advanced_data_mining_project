@@ -57,8 +57,7 @@ int main(int argc, char const *argv[])
 void put_next_500(std::queue<std::string> &q, size_t low_bnd, size_t up_bnd, 
    const std::multimap<int,int> &future)
 {
-   // std::ofstream trainfile("train.dat", std::ios_base::app);
-   std::ofstream trainfile("future_500.dat");
+   std::ofstream trainfile("train.dat", std::ios_base::app);
    if(!trainfile)
    {
       std::cerr << "Unable to open " << "train.dat" << std::endl;

@@ -23,7 +23,6 @@ int main(int argc, char const *argv[])
    int u;
    int v;
    int mapped_id = 0;
-      std::cout << " hi" << std::endl;
 
    while(infile >> u >> v)
    {
