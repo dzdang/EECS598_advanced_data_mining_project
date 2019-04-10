@@ -57,7 +57,8 @@ int main(int argc, char const *argv[])
 void put_next_500(std::queue<std::string> &q, size_t low_bnd, size_t up_bnd, 
    const std::multimap<int,int> &future)
 {
-   std::ofstream trainfile("train.dat", std::ios_base::app);
+   // std::ofstream trainfile("train.dat", std::ios_base::app);
+   std::ofstream trainfile("future_500.dat");
    if(!trainfile)
    {
       std::cerr << "Unable to open " << "train.dat" << std::endl;
@@ -84,26 +85,29 @@ void put_next_500(std::queue<std::string> &q, size_t low_bnd, size_t up_bnd,
       if(future.find(popped) != future.end())
       {
          auto my_pair = future.equal_range(popped);
-         auto not_found = true;
 
-         for(auto it = my_pair.first; it != my_pair.second; it++)
-         {
-            if(it->second < up_bnd){}
-            else not_found = false;
-         }
+         if(std::distance(my_pair.first, my_pair.second) >= 2)//we only want nodes that have 2 or more edges
+         {  
+            auto not_found = true;
 
-         if(not_found)
-         {
             for(auto it = my_pair.first; it != my_pair.second; it++)
             {
-               future500.emplace(it->second);
-               trainfile << it->first << " " << it->second << std::endl;
-            }            
-            counter++;
-         }
+               if(it->second < up_bnd && future500.find(it->second) == future500.end()){}
+               else not_found = false;
+            }
 
+            if(not_found)
+            {
+               for(auto it = my_pair.first; it != my_pair.second; it++)
+               {
+                  future500.emplace(popped);
+                  trainfile << it->first << " " << it->second << std::endl;
+               }            
+               counter++;
+            }
+         }
       }
-      else std::cout << "popped not found; this shouldn't happen; node id is: " << popped << std::endl;
+      // else std::cout << "popped not found; this shouldn't happen; node id is: " << popped << std::endl;
 
    }
 }
