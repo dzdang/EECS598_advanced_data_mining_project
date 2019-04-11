@@ -112,11 +112,13 @@ int main(int argc, char const *argv[])
 // }
 
 //function for partioning the provide edge list file into train and test data based on node_id
-std::multimap<int,int> partition_edges(const int low_bnd, const int up_bnd, const std::string &filename)
+// std::multimap<int,int> partition_edges(const int low_bnd, const int up_bnd, const std::string &filename)
+std::multimap<int,int> partition_edges(const std::string &filename)
 {
    const std::string trainfilename("subgraph.txt");
    // const std::string test_filename("test.dat");
    std::multimap<int,int> future;
+   std::unordered_multimap adj_list;
 
    std::cout << "Partioning edges into train and test.." << std::endl;
 
@@ -145,19 +147,18 @@ std::multimap<int,int> partition_edges(const int low_bnd, const int up_bnd, cons
    auto v = std::stoi(str.substr(str.find('\t')));
 
    std::ofstream trainfile("subgraph.txt");
-   // std::ofstream testfile("test.dat");
 
-   if(u < up_bnd && v < up_bnd && u >= low_bnd && v >= low_bnd) trainfile << u << " " << v << std::endl;
+   if(u < up_bnd && v < up_bnd && u >= low_bnd && v >= low_bnd) adj_list.emplace(u,v);
    else if(u >= up_bnd && v >= low_bnd) future.emplace(u,v); 
 
    while(infile >> u >> v)
    {
-      if(u < up_bnd && v < up_bnd && u >= low_bnd && v >= low_bnd) trainfile << u << " " << v << std::endl;
-      else if(u >= up_bnd && v >= low_bnd) future.emplace(u,v); 
+      adj_list.emplace(u,v);
+      // if(u < up_bnd && v < up_bnd && u >= low_bnd && v >= low_bnd) trainfile << u << " " << v << std::endl;
+      // else if(u >= up_bnd && v >= low_bnd) future.emplace(u,v); 
    }
 
    trainfile.close();
-   // testfile.close();
    infile.close();
 
    std::cout << "Partitioning done." << std::endl;
