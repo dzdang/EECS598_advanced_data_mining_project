@@ -15,7 +15,7 @@ void put_next_500(std::queue<std::string> &q, size_t low_bnd, size_t up_bnd,
 
 int main(int argc, char const *argv[])
 {
-   if(argc != 5)
+   if(argc != 6)
    {
       std::cerr << "Expected 5 argument arguments: received: " << argc << std::endl;
       std::cerr << "Provide arguments in following order: " << 
@@ -24,6 +24,7 @@ int main(int argc, char const *argv[])
          "3) Node info file name "
          "4) Input year (lower) to partition"
          "5) Input year (upper) to partition"
+         "6) Get_next_500 (boolean: true if getting next 500; false if not)"
          << std::endl;
       exit(EXIT_FAILURE);
    }
@@ -48,8 +49,7 @@ int main(int argc, char const *argv[])
    auto future = partition_edges(std::stoi(lower_node_id), std::stoi(upper_node_id), edge_filename);
 
    std::cout << future.size() << std::endl;
-
-   put_next_500(q, std::stoi(lower_node_id), std::stoi(upper_node_id), future);
+   if(argv[5] == "true") put_next_500(q, std::stoi(lower_node_id), std::stoi(upper_node_id), future);
 
    return 0;
 }
