@@ -49,7 +49,7 @@ int main(int argc, char const *argv[])
    auto future = partition_edges(std::stoi(lower_node_id), std::stoi(upper_node_id), edge_filename);
 
    std::cout << future.size() << std::endl;
-   if(argv[5] == "true") put_next_500(q, std::stoi(lower_node_id), std::stoi(upper_node_id), future);
+   if(argv[5] == std::string("true")) put_next_500(q, std::stoi(lower_node_id), std::stoi(upper_node_id), future);
 
    return 0;
 }
@@ -57,6 +57,9 @@ int main(int argc, char const *argv[])
 void put_next_500(std::queue<std::string> &q, size_t low_bnd, size_t up_bnd, 
    const std::multimap<int,int> &future)
 {
+   std::cout << "Getting future 500" << std::endl;
+
+
    std::ofstream trainfile("train.dat", std::ios_base::app);
    if(!trainfile)
    {
@@ -65,14 +68,6 @@ void put_next_500(std::queue<std::string> &q, size_t low_bnd, size_t up_bnd,
       exit(EXIT_FAILURE);
    }
 
-   std::string u, v;
-   //u is citing and v is cited
-   //we need to check if the front of the q exists in the first column. If it doesn't exist
-   //then we throw it out. If it exists, then we need to check if the value is < up_bnd. If it's not
-   //we throw it out
-   //Otherwise we
-   //add this popped value to our hash table upt o date. The trick is there can be multiple key-value
-   //pairs with the same key
    size_t counter = 0;
    size_t popped;
    std::unordered_set<size_t> future500;
@@ -85,7 +80,7 @@ void put_next_500(std::queue<std::string> &q, size_t low_bnd, size_t up_bnd,
       {
          auto my_pair = future.equal_range(popped);
 
-         if(std::distance(my_pair.first, my_pair.second) >= 2)//we only want nodes that have 2 or more edges
+         if(std::distance(my_pair.first, my_pair.second) >= 2)//we only want future nodes that have 2 or more edges
          {  
             auto not_found = true;
 
@@ -114,8 +109,6 @@ void put_next_500(std::queue<std::string> &q, size_t low_bnd, size_t up_bnd,
 //function for partioning the provide edge list file into train and test data based on node_id
 std::multimap<int,int> partition_edges(const int low_bnd, const int up_bnd, const std::string &filename)
 {
-   const std::string trainfilename("train.dat");
-   // const std::string test_filename("test.dat");
    std::multimap<int,int> future;
 
    std::cout << "Partioning edges into train and test.." << std::endl;
@@ -145,7 +138,7 @@ std::multimap<int,int> partition_edges(const int low_bnd, const int up_bnd, cons
    auto v = std::stoi(str.substr(str.find('\t')));
 
    std::ofstream trainfile("train.dat");
-   std::ofstream testfile("test.dat");
+   // std::ofstream testfile("test.dat");
 
    if(u < up_bnd && v < up_bnd && u >= low_bnd && v >= low_bnd) trainfile << u << " " << v << std::endl;
    else if(u >= up_bnd && v >= low_bnd) future.emplace(u,v); 
