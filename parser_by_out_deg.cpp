@@ -17,7 +17,7 @@ int main(int argc, char const *argv[])
 {
    if(argc != 6)
    {
-      std::cerr << "Expected 5 argument arguments: received: " << argc << std::endl;
+      std::cerr << "Expected 6 argument arguments: received: " << argc << std::endl;
       std::cerr << "Provide arguments in following order: " << 
          "1) ./executable "
          "2) Edge list file name " 
